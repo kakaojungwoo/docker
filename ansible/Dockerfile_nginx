@@ -1,0 +1,5 @@
+FORM Nginx
+RUN apt-get update
+EXPOSE 80
+ADD index.html /var/www/html/index.html
+cmd ["Nginx", "-d" "FOREGROUND"]

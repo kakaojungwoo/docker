@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  cadvisor:
+    image: google/cadvisor:latest
+    deploy:
+      replicas: 3
+      placement: 
+        constraints: 
+          - node.role==worker
+    ports:
+      - "8100-8103:8080"
+    restart: always    
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:rw"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+      - "/dev/disk/:/dev/disk:ro"
+
+  nginx:
+    image: nginx:latest
+    deploy:
+      replicas: 3
+      placement: 
+        constraints: 
+          - node.role==worker
+    ports:
+      - "8001-8003:80"
+    restart: always  
+
+  mariadb:
+    image: mariadb:10.4
+    deploy:
+      replicas: 3
+      placement: 
+        constraints: 
+          - node.role==worker
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: docker-toy
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    restart: always    
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
+
+#networks:

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+docker image rm -f $(docker image ls -aq)
+
+echo "모든 이미지가 삭제되었습니다."
+echo "----------결과-----------"
+docker image ls --all
